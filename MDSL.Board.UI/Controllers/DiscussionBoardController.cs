@@ -40,6 +40,7 @@ namespace MDSL.Board.UI.Controllers
             return threads;
         }
 
+        // TODO: Couldn't get WebApi call working from here either
         //[HttpGet("[action]")]
         //public IEnumerable<ThreadViewModel> GetThreads()
         //{

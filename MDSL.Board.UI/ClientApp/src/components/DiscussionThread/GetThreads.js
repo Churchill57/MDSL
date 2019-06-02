@@ -10,8 +10,9 @@ export class GetThreads extends Component {
   }
 
   componentDidMount() {
-      //this.populateThreadsDataLocal();
-      this.populateThreadsDataWebApi();
+      this.populateThreadsDataLocal();
+      // TODO: Get populateThreadsDataWebApi working!
+      //this.populateThreadsDataWebApi();
   }
 
   static renderThreadsTable(threads) {
