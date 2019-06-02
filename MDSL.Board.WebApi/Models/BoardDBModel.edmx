@@ -1,0 +1,146 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="MDSL.Board.DatabaseModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="DiscussionReply">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ThreadId" Type="int" Nullable="false" />
+          <Property Name="Created" Type="datetime" Nullable="false" />
+          <Property Name="CreatedBy" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="Body" Type="varchar(max)" Nullable="false" />
+        </EntityType>
+        <EntityType Name="DiscussionThread">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Title" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="Body" Type="varchar(max)" Nullable="false" />
+          <Property Name="Created" Type="datetime" Nullable="false" />
+          <Property Name="CreatedBy" Type="varchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_DiscussionReply_DiscussionThread">
+          <End Role="DiscussionThread" Type="Self.DiscussionThread" Multiplicity="1" />
+          <End Role="DiscussionReply" Type="Self.DiscussionReply" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DiscussionThread">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="DiscussionReply">
+              <PropertyRef Name="ThreadId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="MDSLBoardDatabaseModelStoreContainer">
+          <EntitySet Name="DiscussionReply" EntityType="Self.DiscussionReply" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DiscussionThread" EntityType="Self.DiscussionThread" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_DiscussionReply_DiscussionThread" Association="Self.FK_DiscussionReply_DiscussionThread">
+            <End Role="DiscussionThread" EntitySet="DiscussionThread" />
+            <End Role="DiscussionReply" EntitySet="DiscussionReply" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="MDSL.Board.DatabaseModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="DiscussionReply">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ThreadId" Type="Int32" Nullable="false" />
+          <Property Name="Created" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CreatedBy" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Body" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="DiscussionThread" Relationship="Self.FK_DiscussionReply_DiscussionThread" FromRole="DiscussionReply" ToRole="DiscussionThread" />
+        </EntityType>
+        <EntityType Name="DiscussionThread">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Title" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Body" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Created" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CreatedBy" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="DiscussionReplies" Relationship="Self.FK_DiscussionReply_DiscussionThread" FromRole="DiscussionThread" ToRole="DiscussionReply" />
+        </EntityType>
+        <Association Name="FK_DiscussionReply_DiscussionThread">
+          <End Role="DiscussionThread" Type="Self.DiscussionThread" Multiplicity="1" />
+          <End Role="DiscussionReply" Type="Self.DiscussionReply" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DiscussionThread">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="DiscussionReply">
+              <PropertyRef Name="ThreadId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="BoardDBContext" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="DiscussionReplies" EntityType="Self.DiscussionReply" />
+          <EntitySet Name="DiscussionThreads" EntityType="Self.DiscussionThread" />
+          <AssociationSet Name="FK_DiscussionReply_DiscussionThread" Association="Self.FK_DiscussionReply_DiscussionThread">
+            <End Role="DiscussionThread" EntitySet="DiscussionThreads" />
+            <End Role="DiscussionReply" EntitySet="DiscussionReplies" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="MDSLBoardDatabaseModelStoreContainer" CdmEntityContainer="BoardDBContext">
+          <EntitySetMapping Name="DiscussionReplies">
+            <EntityTypeMapping TypeName="MDSL.Board.DatabaseModel.DiscussionReply">
+              <MappingFragment StoreEntitySet="DiscussionReply">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="ThreadId" ColumnName="ThreadId" />
+                <ScalarProperty Name="Created" ColumnName="Created" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="Body" ColumnName="Body" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DiscussionThreads">
+            <EntityTypeMapping TypeName="MDSL.Board.DatabaseModel.DiscussionThread">
+              <MappingFragment StoreEntitySet="DiscussionThread">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="Body" ColumnName="Body" />
+                <ScalarProperty Name="Created" ColumnName="Created" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
